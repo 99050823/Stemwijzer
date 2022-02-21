@@ -3,11 +3,16 @@ body {
     justify-content: center;
 }
 
-div {
+#container {
     width: 800px;
 }
 
 h2 {
     margin-left: 10px;
 }
+
+.button-panel, #terug {
+    display: none;
+}
+
 
