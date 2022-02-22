@@ -1,6 +1,5 @@
 class Question {
-    constructor(count, title, text) {
-        this.count = count;
+    constructor(title, text) {
         this.title = title;
         this.text = text;
     }
@@ -11,18 +10,17 @@ const countEl = document.getElementById("count");
 const titleEl = document.querySelector("h3");
 const buttonPanel = document.querySelector(".button-panel");
 
+const start = document.getElementById("startBttn");  
+const terug = document.getElementById("terugBttn");
+
 var num = 0;
 var eensScore = 0;
 var oneensScore = 0;
 
 var buttons = document.querySelectorAll("button");
-buttons[4].onclick = initialize;
-
-for (let i = 0; i < 3; i++) {
-    buttons[i].addEventListener("click", () => {
-        bttnControll(i);
-    })
-}
+start.addEventListener("click", () => {
+    initialize();
+})
 
 function generateQuestions (count) {
     return subjects[count].statement;
@@ -33,8 +31,11 @@ function generateTitle (count) {
 }
 
 function initialize () {
+    var count = num + 1;
+
     buttons[3].style.display = "inline";
     buttonPanel.style.display = "block";
+    terug.style.display = "inline";
 
     for (let i = 0; i < 3; i++) {
         buttons[i].style.backgroundColor = null;
@@ -44,13 +45,15 @@ function initialize () {
     if (num == subjects.length) {
         endFunc();
     } else {
-        let question = new Question(num, generateTitle(num), generateQuestions(num));
 
-        countEl.innerHTML = "Vraag " + question.count;
+        getButtons();
+        let question = new Question(generateTitle(num), generateQuestions(num));
+
+        countEl.innerHTML = "Vraag " + count;
         titleEl.innerHTML = question.title;
         textEl.innerHTML = question.text;
 
-        buttons[4].innerHTML = "Next";
+        start.innerHTML = "Next";
         num++;
     }   
 }
@@ -58,38 +61,34 @@ function initialize () {
 function endFunc () {
     countEl.innerHTML = " ";
     titleEl.innerHTML = "END";
-    textEl.innerHTML = " ";
-    buttons[4].innerHTML = "Refresh";
+    textEl.innerHTML = "Eens aantal = <br>Oneens aantal = "; 
+    start.innerHTML = "Refresh";
 
-    buttons[4].onclick = () => {
+    buttonPanel.style.display = "none";
+    terug.style.display = "none";
+
+    start.addEventListener("click", () => {
         window.location.reload();
+    })
+}
+
+function bttnControll () {
+
+    var el = document.getElementById(this.id).parentElement;
+    var buttonArr = el.getElementsByTagName("button");
+
+    for (let i = 0; i < buttonArr.length; i++) {
+        if (buttonArr[i].id == this.id) {
+            buttonArr[i].style.backgroundColor = "blue";
+        } else {
+            buttonArr[i].style.backgroundColor = "red";
+        }
     }
 }
 
-function bttnControll (num) {
-    let scoreBool = [false, false, false];
+function getButtons () {
 
-    buttons[0].style.color = "white";
-    buttons[1].style.color = "white";
-    buttons[2].style.color = "white";
-
-    if (num == 0) {
-        buttons[0].style.backgroundColor = "blue";
-        buttons[1].style.backgroundColor = "red";
-        buttons[2].style.backgroundColor = "red";
-
-        scoreBool[num] = scoreBool[num] ? false : true;
-    } else if (num == 1) {
-        buttons[0].style.backgroundColor = "red";
-        buttons[1].style.backgroundColor = "blue";
-        buttons[2].style.backgroundColor = "red";
-
-        scoreBool[num] = scoreBool[num] ? false : true;
-    } else if (num == 2) {
-        buttons[0].style.backgroundColor = "red";
-        buttons[1].style.backgroundColor = "red";
-        buttons[2].style.backgroundColor = "blue";
-
-        scoreBool[num] = scoreBool[num] ? false : true;
+    for (let i = 0; i < 3; i++) {
+        buttons[i].addEventListener("click", bttnControll);
     }
 }
