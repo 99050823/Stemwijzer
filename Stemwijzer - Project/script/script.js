@@ -11,15 +11,20 @@ const titleEl = document.querySelector("h3");
 const buttonPanel = document.querySelector(".button-panel");
 
 const start = document.getElementById("startBttn");  
-const terug = document.getElementById("terugBttn");
+const back = document.getElementById("terugBttn");
 
 var num = 0;
-var eensScore = 0;
-var oneensScore = 0;
 var checkBool = [false, false, false];
+var answerArr = [];
 
 var buttons = document.querySelectorAll("button");
 start.addEventListener("click", () => {
+    initialize();
+})
+
+back.addEventListener("click", () => {
+    num = num - 2;
+    answerArr.pop();
     initialize();
 })
 
@@ -36,7 +41,12 @@ function initialize () {
 
     buttons[3].style.display = "inline";
     buttonPanel.style.display = "block";
-    terug.style.display = "inline";
+
+    if (num > 0) {
+        back.style.display = "inline";   
+    } else {
+        back.style.display = "none";
+    }
 
     for (let i = 0; i < 3; i++) {
         buttons[i].style.backgroundColor = null;
@@ -45,9 +55,11 @@ function initialize () {
     scoreCheck();
 
     if (num == subjects.length) {
-        endFunc();
+        let arr = calculate();
+        endFunc(arr);
     } else {
         getButtons();
+
         let question = new Question(generateTitle(num), generateQuestions(num));
 
         countEl.innerHTML = "Vraag " + count;
@@ -60,17 +72,18 @@ function initialize () {
     checkBool = [false, false, false];
 }
 
-function endFunc () {
+function endFunc (arr) {
     countEl.innerHTML = " ";
-    titleEl.innerHTML = finalResult();
-    textEl.innerHTML = "Eens Score: " + eensScore  + "<br>" + 
-    "Oneens Score: " + oneensScore; 
+    titleEl.innerHTML = partyResult(arr);
+    textEl.innerHTML = `Eens score : <br>
+    Oneens score : `; 
     start.innerHTML = "Refresh";
 
     buttonPanel.style.display = "none";
-    terug.style.display = "none";
+    back.style.display = "none";
 
     start.addEventListener("click", () => {
+        console.clear();
         window.location.reload();
     })
 }
@@ -104,13 +117,56 @@ function bttnControll () {
 
 function scoreCheck () {
     if (checkBool[0] == true) {
-        oneensScore++;
+        // Oneens Score
+        answerArr.push("Oneens");
     } else if (checkBool[2] == true) {
-        eensScore++;
+        // Eens Score
+        answerArr.push("Eens");
+    } else if (checkBool[1]){
+        // Neutraal
+        answerArr.push("Neutraal");
     }
+    console.log(answerArr);
 }
 
-function finalResult () {
-    return "(Voorbeeld: VVD)";
+function partyResult (arr) {
+    console.log(arr);
+    let mainKey = arr['PVV'];
+
+    for (const key in arr) {
+        if (arr[key] > mainKey) {
+            mainKey = arr[key];
+        }
+    }
+
+    function getKeyByValue (arr, mainKey) {
+        return Object.keys(arr).find(key => arr[key] === mainKey);
+    }
+
+    return getKeyByValue(arr, mainKey);
 }
 
+function calculate () {
+    console.clear();
+    let matchedParties = {};
+
+    for (let a = 0; a < parties.length; a++) {
+        let key = parties[a].name;
+        matchedParties[key] = 0;
+    }
+
+    for (let i = 0; i < answerArr.length; i++) { 
+        if (answerArr[i] == "Eens") {
+            let count = subjects[i].parties.length;
+
+            for (let j = 0; j < count; j++) {
+                if (subjects[i].parties[j].position == "pro") {
+                    let party = subjects[i].parties[j].name;
+                    matchedParties[party]++;
+                }   
+            }
+        }
+    }
+
+    return matchedParties;
+}
