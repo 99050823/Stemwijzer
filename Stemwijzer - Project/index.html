@@ -4,38 +4,36 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stemwijzer</title>
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> 
-    <link rel="stylesheet" href="style/style.css">
+    <title>STEMWIJZER</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <div id="container" class="w3-container w3-margin w3-white">
         <header class="w3-header w3-teal">
             <h2>Stemwijzer</h2>
         </header>
 
         <section class="w3-center w3-section w3-aqua">
-            <p id="count"></p>
-            <h3>Druk op start om te beginnen met de vragenlijst</h3>
+            <h2 id="title">Welkom</h2>
             <p id="text"></p>
 
-            <div class="button-panel">
-                <button id="oneensBttn" class="w3-button w3-hover-blue">Oneens</button>
-                <button id="neutraalBttn" class="w3-button w3-hover-blue">Neutraal</button>
-                <button id="eensBttn" class="w3-button w3-hover-blue">Eens</button>
-            </div>
-
-            <button id="terugBttn" class="w3-button">Vorige vraag</button>
             <button id="startBttn" class="w3-button w3-hover-blue">Start</button>
+    
+            <div class="button-panel">
+                <button id="eensBttn" class="w3-button w3-hover-blue">Eens</button>
+                <button id="neutraalBttn" class="w3-button w3-hover-blue">Neutraal</button>
+                <button id="oneensBttn" class="w3-button w3-hover-blue">Oneens</button>
+            </div>
+    
+            <button id="backBttn" class="w3-button w3-hover-blue">Back</button>
+            <button id="nextBttn" class="w3-button w3-hover-blue">Next</button>
         </section>
 
-        <footer class="w3-footer w3-dark-gray w3-center">
-            Footer
-        </footer>
+        <footer class="w3-footer w3-dark-gray w3-center">FOOTER</footer>
     </div>
-    
+
     <script src="http://stemwijzer.dvc-icta.nl/testdata.js"></script>
-    <script src="script/script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

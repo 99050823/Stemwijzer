@@ -1,0 +1,30 @@
+body {
+    background-image: url('../images/background-image.png');
+    display: flex;
+    justify-content: center;
+}
+
+#container {
+    border-radius: 10px;
+    width: 800px;
+}
+
+.button-panel {
+    display: none;
+}
+
+#backBttn {
+    display: none;
+}
+
+#nextBttn {
+    display: none;
+}
+
+header h2 {
+    padding-left: 10px;
+}
+
+header {
+    margin-top: -10px;
+}
