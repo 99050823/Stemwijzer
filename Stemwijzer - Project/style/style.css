@@ -9,15 +9,7 @@ body {
     width: 800px;
 }
 
-.button-panel {
-    display: none;
-}
-
-#backBttn {
-    display: none;
-}
-
-#nextBttn {
+#backBttn, .button-panel, #multiplier, #nextBttn {
     display: none;
 }
 
