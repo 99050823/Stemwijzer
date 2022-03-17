@@ -1,5 +1,8 @@
 const bttnPanel = document.querySelector(".button-panel");
 const choiceBttns = bttnPanel.querySelectorAll("button");
+const section = document.querySelector("section");
+const endButtons = document.querySelector(".end-buttons");
+const allSectionEl = document.querySelectorAll("section *");
 
 const start = document.getElementById("startBttn");
 const next = document.getElementById("nextBttn");
@@ -17,7 +20,11 @@ var multiplier = false;
 start.onclick = startFunc;
 
 multi.addEventListener("click", () => {
-    alert("MULTIPLIER");
+    if (multi.style.backgroundColor !== "green") {
+        multi.style.backgroundColor = "green";
+    } else {
+        multi.style.backgroundColor = "red";
+    }
 })
 
 next.addEventListener("click", () => {
@@ -57,19 +64,41 @@ function startFunc() {
 
 function endFunc(end) {
     // Displays the highest rated party
-    titleEl.innerHTML = end;
-    
-    countEl.style.display = "none";
-    textEl.style.display = "none";
-    back.style.display = "none";
-    bttnPanel.style.display = "none";
-    next.style.display = "none";
+    allSectionEl.forEach(el => {
+        el.style.display = "none";
+    });
+
+    let endContainer = document.createElement("div");
+    let endList = document.createElement("ul");
+    let title = document.createElement("h2");
+
+    endList.classList.add("end-list");
+    title.innerHTML = "UITKOMST";
+
+    endContainer.append(title);
+    section.append(endContainer);
+    endContainer.append(endList);
+
+    for (const key in end) {
+        let listEl = document.createElement("li");
+        let listDiv = document.createElement("div");
+        let listText = document.createElement("p");
+
+        listDiv.innerHTML = key;
+        listText.innerHTML = `Aantal overeengekomen stemmen : ${end[key]}`;
+        
+        listDiv.classList.add("list-item");
+        listDiv.append(listText);
+        listEl.append(listDiv);
+        endList.append(listEl); 
+    }
 }
 
 function questionController(count) {
     // Controlls questions based on a counter
     let questionNumber = count+1;
 
+    multi.style.backgroundColor = null;
     for (let i = 0; i < 3; i++) {
         choiceBttns[i].style.backgroundColor = null;
     }
@@ -116,7 +145,11 @@ function saveAnswer(index) {
     } else if(choiceBttns[1].style.backgroundColor == "blue") {
         answerArr[index] = "Neutraal"; 
     } else if(choiceBttns[2].style.backgroundColor == "blue"){
-        answerArr[index] = "Eens";
+        if (multi.style.backgroundColor == "green") {
+            answerArr[index] = "Eens2x";
+        } else {
+            answerArr[index] = "Eens";
+        }
     } else {
         answerArr[index] = "<Empty>";
     }
@@ -140,18 +173,14 @@ function calculate() {
                     let name = subjects[j].parties[a].name;
                     partyScore[name]++;     
                 }
+            } else if(answerArr[j] == "Eens2x"){
+                if (subjects[j].parties[a].position == "pro") {
+                    let name = subjects[j].parties[a].name;
+                    partyScore[name] = partyScore[name]+2;     
+                }
             }
         }    
     }
 
-    let arr = Object.values(partyScore);
-    highestScore = Math.max(...arr);
-
-    function getKeyByValue (object, value) {
-        return Object.keys(object).find(key => object[key] === value);
-    }
-
-    console.log(partyScore);
-
-    return getKeyByValue(partyScore, highestScore);
+    return partyScore;
 }
