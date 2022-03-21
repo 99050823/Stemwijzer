@@ -30,3 +30,8 @@ header {
     margin-bottom: 30px;
     line-height: 0%;
 }
+
+.end-container {
+    overflow-y: scroll;
+    height: 6.5cm;
+}

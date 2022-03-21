@@ -8,6 +8,8 @@ const start = document.getElementById("startBttn");
 const next = document.getElementById("nextBttn");
 const back = document.getElementById("backBttn");
 const multi = document.getElementById("multiplier");
+const filter_seculair = document.getElementById("filterSec");
+const filter_score = document.getElementById("filterScore");
 
 const titleEl = document.getElementById("title");
 const textEl = document.getElementById("text");
@@ -33,6 +35,20 @@ next.addEventListener("click", () => {
     questionController(counter);
 })
 
+back.addEventListener("click", () => {
+    counter--;
+    questionController(counter);
+    saveColor(counter);
+})
+
+filter_score.addEventListener("click", () => {
+    alert("Score");
+})
+
+filter_seculair.addEventListener("click", () => {
+    alert("Seculair");
+})
+
 class Question {
     constructor(title, text) {
         this.title = title 
@@ -55,7 +71,6 @@ function startFunc() {
     bttnPanel.style.display = "block";
     next.style.display = "inline";
     multi.style.display = "inline";
-    back.style.display = "inline";
     start.style.display = "none";
     countEl.innerHTML = "1.";
 
@@ -63,16 +78,23 @@ function startFunc() {
 }
 
 function endFunc(end) {
-    // Displays the highest rated party
+    // Displays all parties and a score 
+    let endContainer = document.createElement("div");
+    let endList = document.createElement("ul");
+    let title = document.createElement("h2");
+    let bttns = endButtons.querySelectorAll("button");
+
     allSectionEl.forEach(el => {
         el.style.display = "none";
     });
 
-    let endContainer = document.createElement("div");
-    let endList = document.createElement("ul");
-    let title = document.createElement("h2");
+    bttns.forEach(el => {
+        el.style.display = "inline";
+    });
 
+    endButtons.style.display = "block";
     endList.classList.add("end-list");
+    endContainer.classList.add("end-container");
     title.innerHTML = "UITKOMST";
 
     endContainer.append(title);
@@ -92,6 +114,7 @@ function endFunc(end) {
         listEl.append(listDiv);
         endList.append(listEl); 
     }
+
 }
 
 function questionController(count) {
@@ -101,6 +124,12 @@ function questionController(count) {
     multi.style.backgroundColor = null;
     for (let i = 0; i < 3; i++) {
         choiceBttns[i].style.backgroundColor = null;
+    }
+
+    if (count >= 1) {
+        back.style.display = "inline";
+    } else {
+        back.style.display = "none"
     }
 
     if (count == subjects.length) {
@@ -183,4 +212,21 @@ function calculate() {
     }
 
     return partyScore;
+}
+
+function saveColor (count) {
+    //Saves color of buttons 
+    if (answerArr[count] == "Eens") {
+        choiceBttns[2].style.backgroundColor = "blue";
+        choiceBttns[1].style.backgroundColor = "red";
+        choiceBttns[0].style.backgroundColor = "red";
+    } else if (answerArr[count] == "Neutraal") {
+        choiceBttns[1].style.backgroundColor = "blue";
+        choiceBttns[2].style.backgroundColor = "red";
+        choiceBttns[0].style.backgroundColor = "red";
+    } else if(answerArr[count] == "Oneens"){
+        choiceBttns[0].style.backgroundColor = "blue";
+        choiceBttns[2].style.backgroundColor = "red";
+        choiceBttns[1].style.backgroundColor = "red";
+    } 
 }
