@@ -9,7 +9,7 @@ body {
     width: 800px;
 }
 
-#backBttn, .button-panel, #multiplier, #nextBttn, .end-buttons {
+#backBttn, .button-panel, #multiplier, #nextBttn, .end-buttons, .end-container {
     display: none;
 }
 

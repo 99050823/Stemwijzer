@@ -8,8 +8,9 @@ const start = document.getElementById("startBttn");
 const next = document.getElementById("nextBttn");
 const back = document.getElementById("backBttn");
 const multi = document.getElementById("multiplier");
-const filter_seculair = document.getElementById("filterSec");
-const filter_score = document.getElementById("filterScore");
+const filter_seculair = document.getElementById("filter-secular");
+const filter_score = document.getElementById("filter-score");
+const filter_normal = document.getElementById("filter-normal")
 
 const titleEl = document.getElementById("title");
 const textEl = document.getElementById("text");
@@ -42,11 +43,21 @@ back.addEventListener("click", () => {
 })
 
 filter_score.addEventListener("click", () => {
-    alert("Score");
+    deleteEndData();
+    let partyScore = calculate();
+    filter(partyScore, "score");
 })
 
 filter_seculair.addEventListener("click", () => {
-    alert("Seculair");
+    deleteEndData();
+    let partyScore = calculate();
+    filter(partyScore, "seculair");
+})
+
+filter_normal.addEventListener("click", () => {
+    deleteEndData();
+    let partyScore = calculate();
+    endFunc(partyScore);
 })
 
 class Question {
@@ -79,7 +90,7 @@ function startFunc() {
 
 function endFunc(end) {
     // Displays all parties and a score 
-    let endContainer = document.createElement("div");
+    let endContainer = document.querySelector(".end-container")
     let endList = document.createElement("ul");
     let title = document.createElement("h2");
     let bttns = endButtons.querySelectorAll("button");
@@ -92,9 +103,9 @@ function endFunc(end) {
         el.style.display = "inline";
     });
 
+    endContainer.style.display = "block";
     endButtons.style.display = "block";
     endList.classList.add("end-list");
-    endContainer.classList.add("end-container");
     title.innerHTML = "UITKOMST";
 
     endContainer.append(title);
@@ -114,7 +125,6 @@ function endFunc(end) {
         listEl.append(listDiv);
         endList.append(listEl); 
     }
-
 }
 
 function questionController(count) {
@@ -216,7 +226,7 @@ function calculate() {
 
 function saveColor (count) {
     //Saves color of buttons 
-    if (answerArr[count] == "Eens") {
+    if (answerArr[count] == "Eens" || answerArr[count] == "Eens2x") {
         choiceBttns[2].style.backgroundColor = "blue";
         choiceBttns[1].style.backgroundColor = "red";
         choiceBttns[0].style.backgroundColor = "red";
@@ -230,3 +240,38 @@ function saveColor (count) {
         choiceBttns[1].style.backgroundColor = "red";
     } 
 }
+
+function deleteEndData() {
+    //Deletes all data to instigate the filter function
+    let endContainer = document.querySelector(".end-container")
+    let endContainerAll = document.querySelectorAll(".end-container *");
+    endContainerAll.forEach(el => {
+        el.style.display = "none";
+    })
+
+    endContainer.style.display = "none";
+}
+
+function filter (obj, check) {
+    //Filters the party score array based on wich button the user pressed
+    let container = document.querySelector(".end-container");
+    container.style.display = "block";
+    let newObj = {};
+
+    if (check == "score") {
+        let sorted = Object.entries(obj).sort((a,b) => b[1]-a[1])    
+
+        sorted.forEach(el => {
+            let key = el[0];
+            newObj[key] = el[1];
+        })
+    } else if(check == "seculair"){
+        for (let i = 0; i < parties.length; i++) {
+            if (parties[i].secular == true) {
+                let key = parties[i].name;
+                newObj[key] = obj[key];
+            }
+        }
+    } 
+    endFunc(newObj);
+} 
